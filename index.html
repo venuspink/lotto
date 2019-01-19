@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>OK로또</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+
+        <script>
+            const min = 1;
+            const max = 45;
+            let heroes = 6;
+            
+            function generateLotto(){
+                let gameNumber = document.getElementById("gameNumber").value;
+
+                if(gameNumber == '' || gameNumber == undefined){
+                    gameNumber = 1;
+                }
+                
+                const luckyList = [];
+                for(let i=0; i<gameNumber; i++){
+                    const numbers = [];
+                    while(heroes > 0){
+                        let rn = randomNumber();
+                        let dupCnt = 0;
+                        for(let i of numbers){
+                            if(i == rn){
+                                dupCnt++;
+                            }
+                        }
+                        if(dupCnt == 0){
+                            numbers.push(rn);
+                            heroes--;
+                        }
+                    }
+                    heroes = 6; //초기화
+                    numbers.sort((a,b) => a-b);
+                    luckyList.push(numbers);
+                }
+                
+                console.log("luckyList :", luckyList);
+                let resultHtml ="";
+                for(let o of luckyList){
+                   resultHtml += "<p>"+o+"</p>";     
+                }
+                document.getElementById("luckyNumber").innerHTML = resultHtml;
+
+
+            }
+
+            function randomNumber(){
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+        </script>
+    </head>
+    <body>
+        <h1>로또번호생성</h1>
+        <div>
+            <span>
+                <input type="text" id="gameNumber" placeholder="생성개수" maxlength="2"/>
+                <button onclick="generateLotto(); return false;">생성</button>
+            </span>
+        </div>
+        <div>
+            <span id="luckyNumber"></span>
+        </div>
+    </body>
+</html>
